@@ -6,11 +6,33 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
-func NewConfig() (*koanf.Koanf, error) {
-	k := koanf.New(".")
-	err := k.Load(file.Provider("config/config.yaml"), yaml.Parser())
+var (
+	k      = koanf.New(".")
+	parser = yaml.Parser()
+)
+
+type Config struct {
+	App struct {
+		Name string `koanf:"name"`
+	} `koanf:"app"`
+	HTTP struct {
+		Host string `koanf:"host"`
+		Port string `koanf:"port"`
+	} `koanf:"http"`
+}
+
+func NewConfig() (*Config, error) {
+	err := k.Load(file.Provider("config/config.yaml"), parser)
 	if err != nil {
 		return nil, err
 	}
-	return k, nil
+
+	cfg := &Config{}
+	// k.Unmarshal("", &cfg)
+	err = k.UnmarshalWithConf("", &cfg, koanf.UnmarshalConf{Tag: "koanf"})
+	if err != nil {
+		return nil, err
+	}
+
+	return cfg, nil
 }
