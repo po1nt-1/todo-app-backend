@@ -1,4 +1,71 @@
+basePath: /api/v1
+definitions:
+  entity.Task:
+    properties:
+      completed:
+        type: boolean
+      details:
+        type: string
+      id:
+        type: integer
+    type: object
+  v1.getAllTasksResponse:
+    properties:
+      tasks:
+        items:
+          $ref: '#/definitions/entity.Task'
+        type: array
+    type: object
+  v1.response:
+    properties:
+      error:
+        type: string
+    type: object
+host: 127.0.0.1:8080
 info:
   contact: {}
-paths: {}
+  description: using a task
+  title: Todo-app API
+  version: "1.0"
+paths:
+  /tasks:
+    get:
+      consumes:
+      - application/json
+      description: get a list of tasks
+      operationId: getAllTasks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getAllTasksResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Get all tasks
+      tags:
+      - task
+  /tasks/:id:
+    get:
+      consumes:
+      - application/json
+      description: get a task by id
+      operationId: getTask
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/v1.getAllTasksResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/v1.response'
+      summary: Get a task
+      tags:
+      - task
 swagger: "2.0"

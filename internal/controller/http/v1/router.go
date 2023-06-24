@@ -10,18 +10,20 @@ import (
 
 // NewRouter -.
 // Swagger spec:
-// @title       Todo-app API
-// @description Using a task
-// @version     1.0
-// @host        localhost:8080
-// @BasePath    /v1
+//
+//	@title			Todo-app API
+//	@description	using a task
+//	@version		1.0
+//	@host			127.0.0.1:8080
+//	@BasePath		/api/v1
 func NewRouter(handler *gin.Engine, t usecase.Task) {
 	handler.Use(gin.Logger())
+	handler.Use(gin.Recovery())
 
 	swaggerHandler := ginSwagger.DisablingWrapHandler(swaggerFiles.Handler, "DISABLE_SWAGGER_HTTP_HANDLER")
 	handler.GET("/swagger/*any", swaggerHandler)
 
-	h := handler.Group("/v1")
+	h := handler.Group("/api/v1")
 	{
 		newTaskRoutes(h, t)
 	}
