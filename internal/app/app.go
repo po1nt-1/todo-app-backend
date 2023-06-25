@@ -17,6 +17,7 @@ func Run(cfg *config.Config) {
 	taskUseCase := usecase.New()
 
 	handler := gin.New()
+
 	v1.NewRouter(handler, taskUseCase)
 	httpServer := httpserver.New(
 		handler,
